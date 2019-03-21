@@ -111,11 +111,11 @@ La funcionalidad específica de ASP.NET Core requiere ASP.NET Core 2.1 o más re
 
 ### Mejores practicas y uso
 
-This library allows you to instrument your code with custom metrics and provides some built-in metric collection integrations for ASP.NET Core.
+Esta biblioteca le permite instrumentar su código con métricas personalizadas y proporciona algunas integraciones de colección de métricas incorporadas para ASP.NET y NETCore.
 
-The documentation here is only a minimal quick start. For detailed guidance on using Prometheus in your solutions, refer to the [prometheus-users discussion group](https://groups.google.com/forum/#!forum/prometheus-users). You are also expected to be familiar with the [Prometheus user guide](https://prometheus.io/docs/introduction/overview/).
+La documentación aquí es sólo un inicio rápido mínimo. Para obtener una guía detallada sobre el uso de Prometheus en sus soluciones, consulte  [prometheus-users foro](https://groups.google.com/forum/#!forum/prometheus-users). También se espera que se conoscan los concptos basicos que puede encontrar en la siguiente liga: [Prometheus guia de usuario](https://prometheus.io/docs/introduction/overview/).
 
-Four types of metrics are available: Counter, Gauge, Summary and Histogram. See the documentation on [metric types](http://prometheus.io/docs/concepts/metric_types/) and [instrumentation best practices](http://prometheus.io/docs/practices/instrumentation/#counter-vs.-gauge-vs.-summary) to learn what each is good for.
+Hay disponibles cuatro tipos de métricas: Contador, Calibrador, Resumen e Histograma. Vea la documentación en [Tipos de metricas](http://prometheus.io/docs/concepts/metric_types/) y [Mejores practicas](http://prometheus.io/docs/practices/instrumentation/#counter-vs.-gauge-vs.-summary) para aprender mas sobre cada una.
 
 **The `Metrics` class is the main entry point to the API of this library.** The most common practice in C# code is to have a `static readonly` field for each metric that you wish to export from a given class.
 
