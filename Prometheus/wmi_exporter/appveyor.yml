@@ -1,0 +1,65 @@
+version: "{build}"
+
+os: Visual Studio 2017
+build: off
+stack: go 1.10
+
+environment:
+  GOPATH: c:\gopath
+
+clone_folder: c:\gopath\src\github.com\martinlindhe\wmi_exporter
+
+install:
+  - set PATH=%GOPATH%\bin;%PATH%
+  - set PATH=%PATH%;C:\mingw-w64\x86_64-7.2.0-posix-seh-rt_v5-rev1\mingw64\bin
+  - go get -u github.com/prometheus/promu
+  - go get -u github.com/alecthomas/gometalinter && gometalinter --install
+  - choco install gitversion.portable make -y
+
+test_script:
+  - make test
+
+after_test:
+  - make lint
+
+build_script:
+  - ps: |
+      $ErrorActionPreference = "Stop"
+      gitversion /output json /showvariable FullSemVer | Set-Content VERSION -PassThru
+      $Version = Get-Content VERSION
+      make crossbuild
+      # GH requires all files to have different names, so add version/arch to differentiate
+      foreach($Arch in "amd64","386") {
+        Rename-Item output\$Arch\wmi_exporter.exe -NewName wmi_exporter-$Version-$Arch.exe
+      }
+
+after_build:
+  - ps: |
+      # Build installer packages only on tagged releases
+      if($env:APPVEYOR_REPO_TAG -ne "True") {
+        return
+      }
+      $ErrorActionPreference = "Stop"
+      # The MSI version is not semver compliant, so just take the numerical parts
+      $Version = $env:APPVEYOR_REPO_TAG_NAME -replace '^v?([0-9\.]+).*$','$1'
+      foreach($Arch in "amd64","386") {
+        Write-Verbose "Building wmi_exporter $Version msi for $Arch"
+        .\installer\build.ps1 -PathToExecutable .\output\$Arch\wmi_exporter-$Version-$Arch.exe -Version $Version -Arch "$Arch"
+        Move-Item installer\Output\wmi_exporter-$Version-$Arch.msi output\$Arch\
+      }
+  - promu checksum output\
+
+artifacts:
+  - name: Artifacts
+    path: output\**\*
+
+deploy:
+  - provider: GitHub
+    description: WMI Exporter version $(appveyor_build_version)
+    artifact: Artifacts
+    auth_token:
+      secure: 'CrXWeTf7qONUOEki5olFfGEUPMLDeHj61koDXV3OVEaLgtACmnVHsKUub9POflda'
+    draft: false
+    prerelease: false
+    on:
+      appveyor_repo_tag: true
