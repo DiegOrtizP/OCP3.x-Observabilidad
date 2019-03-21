@@ -1,8 +1,8 @@
 # Prometheus
 
 Nombre     | Sección | Descripcion
----------|-------------|
-WMI exporter | Para maquinas Windows |
+---------|-------------|--------------------
+WMI exporter | Para maquinas Windows | . |
 prometheus-net | Add .Net | Esta es una biblioteca .NET para instrumentar sus aplicaciones y exportar métricas a [Prometheus](http://prometheus.io/). |
 
 ## Para maquinas Windows
