@@ -6,7 +6,7 @@ Prometheus exportador para máquinas con Windows, utilizando WMI (Instrumental d
 
 ## Collectores
 
-Name     | Description | Enabled by default
+Nombre     | Descripcion | Habilitado por default
 ---------|-------------|--------------------
 [ad](docs/collector.ad.md) | Active Directory Domain Services |
 [cpu](docs/collector.cpu.md) | CPU usage | &#10003;
@@ -44,7 +44,7 @@ Cada versión proporciona un instalador .msi. El instalador configurará el WMI 
 
 Si el instalador se ejecuta sin ningún parámetro, el exportador se ejecutará con la configuración predeterminada para los recopiladores habilitados, puertos, etc. Los siguientes parámetros están disponibles:
 
-Name | Description
+Nombre | Descripcion
 -----|------------
 `ENABLED_COLLECTORS` | Como la bandera `--collectors.enabled` , proporciona una lista separada por comas de colectores habilitados.
 `LISTEN_ADDR` | La dirección IP para enlazar. El default es: to 0.0.0.0
