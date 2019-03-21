@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RootNamespace>tester</RootNamespace>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>prometheus-net.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <LangVersion>latest</LangVersion>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <LangVersion>latest</LangVersion>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Tester.NetFramework\AspNetCoreMiddlewareTester.cs" Link="AspNetCoreMiddlewareTester.cs" />
+    <Compile Include="..\Tester.NetFramework\KestrelMetricServerTester.cs" Link="KestrelMetricServerTester.cs" />
+    <Compile Include="..\Tester.NetFramework\MetricPusherTester.cs" Link="MetricPusherTester.cs" />
+    <Compile Include="..\Tester.NetFramework\MetricServerTester.cs" Link="MetricServerTester.cs" />
+    <Compile Include="..\Tester.NetFramework\Program.cs" Link="Program.cs" />
+    <Compile Include="..\Tester.NetFramework\Tester.cs" Link="Tester.cs" />
+    <Compile Include="..\Tester.NetFramework\TesterConstants.cs" Link="TesterConstants.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Prometheus.AspNetCore\Prometheus.AspNetCore.csproj" />
+    <ProjectReference Include="..\Prometheus.NetStandard\Prometheus.NetStandard.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="prometheus-net.test.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
