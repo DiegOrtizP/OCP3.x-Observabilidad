@@ -117,23 +117,23 @@ La documentación aquí es sólo un inicio rápido mínimo. Para obtener una gu�
 
 Hay disponibles cuatro tipos de métricas: Contador, Calibrador, Resumen e Histograma. Vea la documentación en [Tipos de metricas](http://prometheus.io/docs/concepts/metric_types/) y [Mejores practicas](http://prometheus.io/docs/practices/instrumentation/#counter-vs.-gauge-vs.-summary) para aprender mas sobre cada una.
 
-**The `Metrics` class is the main entry point to the API of this library.** The most common practice in C# code is to have a `static readonly` field for each metric that you wish to export from a given class.
+**La clase `Métricas` es el punto de entrada principal a la API de esta biblioteca.** TLa práctica más común en el código C# es tener un campo `static readonly` para cada métrica que desee exportar desde una clase determinada.
 
-More complex patterns may also be used (e.g. combining with dependency injection). The library is quite tolerant of different usage models - if the API allows it, it will generally work fine and provide satisfactory performance. The library is thread-safe.
+También se pueden usar patrones más complejos (por ejemplo, combinando con inyección de dependencia). La biblioteca es bastante tolerante con diferentes modelos de uso: si la API lo permite, generalmente funcionará bien y proporcionará un rendimiento satisfactorio. La biblioteca es segura para subprocesos.
 
-# Installation
+### Instalación
 
-Nuget package for general use and metrics export via HttpListener or to Pushgateway: [prometheus-net](https://www.nuget.org/packages/prometheus-net)
+Paquete Nuget para uso general y exportación de métricas vía HttpListener o a via Pushgateway: [prometheus-net](https://www.nuget.org/packages/prometheus-net)
 
 >Install-Package prometheus-net
 
-Nuget package for ASP.NET Core middleware and stand-alone Kestrel metrics server: [prometheus-net.AspNetCore](https://www.nuget.org/packages/prometheus-net.AspNetCore)
+Paquete Nuget para ASP.NET Core middleware y servidor de métricas Kestrel autónomo: [prometheus-net.AspNetCore](https://www.nuget.org/packages/prometheus-net.AspNetCore)
 
 >Install-Package prometheus-net.AspNetCore
 
-# Counters
+### Contadores
 
-Counters only increase in value and reset to zero when the process restarts.
+Los contadores solo aumentan de valor y se restablecen a cero cuando se reinicia el proceso.
 
 ```csharp
 private static readonly Counter ProcessedJobCount = Metrics
@@ -145,9 +145,9 @@ ProcessJob();
 ProcessedJobCount.Inc();
 ```
 
-# Gauges
+### Calibradores
 
-Gauges can have any numeric value and change arbitrarily.
+Los medidores pueden tener cualquier valor numérico y cambiar arbitrariamente.
 
 ```csharp
 private static readonly Gauge JobsInQueue = Metrics
@@ -164,9 +164,9 @@ var job = jobQueue.Dequeue();
 JobsInQueue.Dec();
 ```
 
-# Summary
+### Resumen
 
-Summaries track the trends in events over time (10 minutes by default).
+Los resúmenes hacen un seguimiento de las tendencias de los eventos a lo largo del tiempo (10 minutos de forma predeterminada).
 
 ```csharp
 private static readonly Summary RequestSizeSummary = Metrics
@@ -177,7 +177,7 @@ private static readonly Summary RequestSizeSummary = Metrics
 RequestSizeSummary.Observe(request.Length);
 ```
 
-By default, only the sum and total count are reported. You may also specify quantiles to measure:
+Por defecto, solo se reportan la suma y el conteo total. También puede especificar las cantidades a medir:
 
 ```csharp
 private static readonly Summary RequestSizeSummary = Metrics
@@ -194,9 +194,9 @@ private static readonly Summary RequestSizeSummary = Metrics
 		});
 ```
 
-# Histogram
+### Histograma
 
-Histograms track the size and number of events in buckets. This allows for aggregatable calculation of quantiles.
+Los histogramas rastrean el tamaño y la cantidad de eventos en cubos. Esto permite el cálculo agregable de los cuantiles.
 
 ```csharp
 private static readonly Histogram OrderValueHistogram = Metrics
@@ -212,9 +212,9 @@ private static readonly Histogram OrderValueHistogram = Metrics
 OrderValueHistogram.Observe(order.TotalValueUsd);
 ```
 
-# Measuring operation duration
+### Duración de la operación de medición
 
-Timers can be used to report the duration of an operation (in seconds) to a Summary, Histogram, Gauge or Counter. Wrap the operation you want to measure in a using block.
+Los temporizadores se pueden usar para informar la duración de una operación (en segundos) a un Resumen, Histograma, Calibrador o Contador. Envuelva la operación que desea medir en un bloque de uso.
 
 ```csharp
 private static readonly Histogram LoginDuration = Metrics
@@ -228,9 +228,9 @@ using (LoginDuration.NewTimer())
 }
 ```
 
-# Tracking in-progress operations
+### Seguimiento de operaciones en curso
 
-You can use `Gauge.TrackInProgress()` to track how many concurrent operations are taking place. Wrap the operation you want to track in a using block.
+Se puede usar `Gauge.TrackInProgress()` para rastrear cuantas operaciones concurrentes están teniendo lugar. Envuelva la operación que desea rastrear en un bloque usando.
 
 ```csharp
 private static readonly Gauge DocumentImportsInProgress = Metrics
@@ -244,9 +244,9 @@ using (DocumentImportsInProgress.TrackInProgress())
 }
 ```
 
-# Counting exceptions
+### Conteo de excepciones
 
-You can use `Counter.CountExceptions()` to count the number of exceptions that occur while executing some code.
+Se puede usar `Counter.CountExceptions()` para contar el número de excepciones que se producen al ejecutar algún código.
 
 
 ```csharp
@@ -258,7 +258,7 @@ private static readonly Counter FailedDocumentImports = Metrics
 FailedDocumentImports.CountExceptions(() => DocumentRepository.ImportDocument(path));
 ```
 
-You can also filter the exception types to observe:
+También puede filtrar los tipos de excepción para observar:
 
 ```csharp
 FailedDocumentImports.CountExceptions(() => DocumentRepository.ImportDocument(path), IsImportRelatedException);
@@ -273,37 +273,37 @@ bool IsImportRelatedException(Exception ex)
 }
 ```
 
-# Labels
+### Etiquetas
 
-All metrics can have labels, allowing grouping of related time series.
+Todas las métricas pueden tener etiquetas, lo que permite agrupar las series de tiempo relacionadas.
 
-See the best practices on [naming](http://prometheus.io/docs/practices/naming/)
-and [labels](http://prometheus.io/docs/practices/instrumentation/#use-labels).
+Ver las mejores practicas en la siguiente liga: [Nombrado](http://prometheus.io/docs/practices/naming/)
+y [Etiquetado](http://prometheus.io/docs/practices/instrumentation/#use-labels).
 
-Taking a counter as an example:
+Ejemplo de contador de tareas:
 
 ```csharp
 private static readonly Counter RequestCountByMethod = Metrics
 	.CreateCounter("myapp_requests_total", "Number of requests received, by HTTP method.",
 		new CounterConfiguration
 		{
-			// Here you specify only the names of the labels.
+			// Aquí usted especifica solo los nombres de las etiquetas.
 			LabelNames = new[] { "method" }
 		});
 
 ...
 
-// You can specify the values for the labels later, once you know the right values (e.g in your request handler code).
+// Puede especificar los valores de las etiquetas más adelante, una vez que conozca los valores correctos (por ejemplo, en el código del controlador de su solicitud).
 counter.WithLabels("GET").Inc();
 ```
 
-NB! Best practices of metric design is to minimize the number of different label values. HTTP request method is good - there are not many values. However, URL would be a bad choice for labeling - it has too many possible values and would lead to significant data processing inefficiency. Try to minimize the possible number of label values in your metric model.
+¡NÓTESE BIEN! Las mejores prácticas de diseño métrico es minimizar el número de valores de etiqueta diferentes. El método de solicitud HTTP correcto, no hay muchos valores. Sin embargo, la URL sería una mala opción para el etiquetado, ya que tiene demasiados valores posibles y daría lugar a una ineficiencia significativa en el procesamiento de datos. Intente minimizar el número posible de valores de etiqueta en su modelo métrico.
 
-# When are metrics published?
+### ¿Cuándo se publican las métricas?
 
-Metrics without labels are published immediately after the `Metrics.CreateX()` call. Metrics that use labels are published when you provide the label values for the first time.
+Las métricas sin etiquetas se publican inmediatamente después de la llamada a `Metrics.CreateX()`. Las métricas que usan etiquetas se publican cuando proporciona los valores de etiqueta por primera vez.
 
-Sometimes you want to delay publishing a metric until you have loaded some data and have a meaningful value to supply for it. The API allows you to suppress publishing of the initial value until you decide the time is right.
+A veces desea retrasar la publicación de una métrica hasta que haya cargado algunos datos y tenga un valor significativo que proporcionar. La API le permite suprimir la publicación del valor inicial hasta que decida que es el momento adecuado.
 
 ```csharp
 private static readonly Gauge UsersLoggedIn = Metrics
@@ -315,17 +315,17 @@ private static readonly Gauge UsersLoggedIn = Metrics
 
 ...
 
-// After setting the value for the first time, the metric becomes published.
+// Después de establecer el valor por primera vez, la métrica se publica.
 UsersLoggedIn.Set(LoadSessions().Count);
 ```
 
-You can also use `.Publish()` on a metric to mark it as ready to be published without modifying the initial value (e.g. to publish a zero).
+Tambien se puede usar `.Publish()` en una métrica para marcarla como lista para ser publicada sin modificar el valor inicial (por ejemplo, para publicar un cero).
 
-# ASP.NET Core exporter middleware
+### ASP.NET Core exporter middleware
 
-For projects built with ASP.NET Core, a middleware plugin is provided.
+Para proyectos creados con ASP.NET Core, se proporciona un complemento de middleware.
 
-If you use the default Visual Studio project template, modify *Startup.cs* as follows:
+Si usa la plantilla de proyecto predeterminada de Visual Studio, modifique *Startup.cs* como se observa a continuación:
 
 ```csharp
 public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -341,7 +341,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 }
 ```
 
-Alternatively, if you use a custom project startup cycle, you can add this directly to the WebHostBuilder instance:
+Alternativamente, si usa un ciclo de inicio de proyecto personalizado, puede agregarlo directamente a la instancia de WebHostBuilder:
 
 ```csharp
 WebHost.CreateDefaultBuilder()
@@ -350,28 +350,28 @@ WebHost.CreateDefaultBuilder()
 	.Run();
 ```
 
-The default configuration will publish metrics on the /metrics URL.
+TLa configuración por defecto publicará métricas en la /metrics URL.
 
-This functionality is delivered in the `prometheus-net.AspNetCore` NuGet package.
+Esta funcionalidad se entrega en el `prometheus-net.AspNetCore` NuGet.
 
-# ASP.NET Core HTTP request metrics
+# ASP.NET Core HTTP recolexión de metricas
 
-The library provides some metrics for ASP.NET Core applications:
+La biblioteca proporciona algunas métricas para las aplicaciones Core de ASP.NET:
 
-* Number of HTTP requests in progress.
-* Total number of received HTTP requests.
-* Duration of HTTP requests.
+* Número de solicitudes HTTP en curso.
+* Número total de solicitudes HTTP recibidas.
+* Duración de las solicitudes HTTP.
 
-These metrics include labels for status code, HTTP method, ASP.NET Core Controller and ASP.NET Core Action.
+Estas métricas incluyen etiquetas para el código de estado, el método HTTP, el controlador central de ASP.NET y la acción central de ASP.NET.
 
-You can register all of the metrics using the default labels and names as follows:
+Puede registrar todas las métricas usando las etiquetas y nombres predeterminados de la siguiente manera:
 
 ```csharp
-// In your Startup.cs Configure() method
+// En su método Startup.cs Configure ()
 app.UseHttpMetrics();
 ```
 
-If you wish to provide a custom metric instance or disable certain metrics you can configure the HTTP metrics like this:
+Si desea proporcionar una instancia de métrica personalizada o deshabilitar ciertas métricas, puede configurar las métricas HTTP de esta manera:
 
 ```csharp
 app.UseHttpMetrics(options =>
@@ -387,59 +387,59 @@ app.UseHttpMetrics(options =>
 });
 ```
 
-The labels for the custom metric you provide *must* be a subset of the following:
+Las etiquetas para la métrica personalizada que proporcione *debe* ser un subconjunto de lo siguiente:
 
 * "code" - Status Code
 * "method" - HTTP method
 * "controller" - ASP.NET Core Controller
 * "action" - ASP.NET Core Action
 
-# ASP.NET Core with basic authentication
+### ASP.NET Core con auntenticación basica
 
-You may wish to restrict access to the metrics export URL. This can be accomplished using any ASP.NET Core authentication mechanism, as prometheus-net integrates directly into the composable ASP.NET Core request processing pipeline.
+Es posible que desee restringir el acceso a la URL de exportación de métricas. Esto se puede lograr utilizando cualquier mecanismo de autenticación de ASP.NET Core, ya que prometheus-net se integra directamente en el canal de procesamiento de solicitudes de ASP.NET Core compostable.
 
-For a simple example we can take [BasicAuthMiddleware by Johan Boström](https://www.johanbostrom.se/blog/adding-basic-auth-to-your-mvc-application-in-dotnet-core) which can be integrated by replacing the `app.UseMetricServer()` line with the following code block:
+Para un ejemplo simple podemos ver [BasicAuthMiddleware by Johan Boström](https://www.johanbostrom.se/blog/adding-basic-auth-to-your-mvc-application-in-dotnet-core) que se puede integrar mediante la sustitución de la `app.UseMetricServer()`, con el siguiente bloque de código:
 
 ```csharp
 app.Map("/metrics", metricsApp =>
 {
     metricsApp.UseMiddleware<BasicAuthMiddleware>("Contoso Corporation");
 
-    // We already specified URL prefix in .Map() above, no need to specify it again here.
+    // Ya hemos especificado la URL prefix in .Map() arriba, no es necesario especificarlo de nuevo aquí.
     metricsApp.UseMetricServer("");
 });
 ```
 
-# Kestrel stand-alone server
+### Kestrel servidor stand-alone
 
-In some situation, you may wish to start a stand-alone metric server using Kestrel (e.g. if your app has no other HTTP-accessible functionality).
+En alguna situación, es posible que desee iniciar un servidor de métricas independiente utilizando Kestrel (por ejemplo, si su aplicación no tiene otra funcionalidad accesible mediante HTTP).
 
 ```csharp
 var metricServer = new KestrelMetricServer(port: 1234);
 metricServer.Start();
 ```
 
-The default configuration will publish metrics on the `/metrics` URL.
+La configuración por defecto publicará métricas en la URL `/metrics`.
 
-# Publishing to Pushgateway
+### Publicar el Pushgateway
 
-Metrics can be posted to a [Pushgateway](https://prometheus.io/docs/practices/pushing/) server.
+Las métricas se pueden publicar en un server [Pushgateway](https://prometheus.io/docs/practices/pushing/).
 
 ```csharp
 var metricServer = new MetricPusher(endpoint: "https://pushgateway.example.org:9091/metrics", job: "some_job");
 metricServer.Start();
 ```
 
-# Publishing via standalone HTTP handler
+### Publicar via standalone HTTP handler
 
-As a fallback option for scenarios where Kestrel or ASP.NET Core hosting is unsuitable, an `HttpListener` based metrics server implementation is also available.
+Como opción alternativa para los escenarios en los que Kestrel o ASP.NET Core hosting  que no son adecuados también está disponible `HttpListener` implementación del servidor de métricas,
 
 ```csharp
 var metricServer = new MetricServer(port: 1234);
 metricServer.Start();
 ```
 
-The default configuration will publish metrics on the `/metrics` URL.
+La configuración por defecto publicará métricas en la URL `/metrics`.
 
 `MetricServer.Start()` may throw an access denied exception on Windows if your user does not have the right to open a web server on the specified port. You can use the *netsh* command to grant yourself the required permissions:
 
