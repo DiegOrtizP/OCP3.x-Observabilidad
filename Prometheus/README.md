@@ -441,20 +441,20 @@ metricServer.Start();
 
 La configuración por defecto publicará métricas en la URL `/metrics`.
 
-`MetricServer.Start()` may throw an access denied exception on Windows if your user does not have the right to open a web server on the specified port. You can use the *netsh* command to grant yourself the required permissions:
+`MetricServer.Start()` puede lanzar una excepción de acceso denegado en Windows si su usuario no tiene derecho a abrir un servidor web en el puerto especificado. Puede usar el comando *netsh* para otorgarse los permisos necesarios:
 
 > netsh http add urlacl url=http://+:1234/metrics user=DOMAIN\user
 
-# Just-in-time updates
+### Actualizaciones en tiempo real
 
-In some scenarios you may want to only collect data when it is requested by Prometheus. To easily implement this scenario prometheus-net enables you to register a callback before every collection occurs. Register your callback using `Metrics.DefaultRegistry.AddBeforeCollectCallback()`.
+En algunos casos, es posible que desee recopilar solo datos cuando Prometheus lo solicite. Para implementar fácilmente este escenario, prometheus-net le permite registrar una devolución de llamada antes de que ocurra cada recopilación. Registre su devolución de llamada usando `Metrics.DefaultRegistry.AddBeforeCollectCallback()`.
 
-Note that all callbacks will be called synchronously before each collection. They should not take more than a few milliseconds in order to ensure that the scrape does not time out. Do not read data from remote systems in these callbacks.
+Tenga en cuenta que todas las devoluciones de llamada se llamarán de forma sincrona antes de cada recopilación. No deben tomar más de unos pocos milisegundos para garantizar que el tiempo no se agote. No lea datos de sistemas remotos en estas devoluciones de llamada.
 
-# Suppressing default metrics
+### Suprimiendo métricas por defecto
 
-The library provides some sample metrics about the current process out of the box, simply to ensure that some output is produced in a default configuration. If these metrics are not desirable you may remove them by calling `Metrics.SuppressDefaultMetrics()` before registering any of your own metrics.
+La biblioteca proporciona algunas métricas de muestra sobre el proceso actual listo para usar, simplemente para garantizar que algunos resultados se produzcan en una configuración predeterminada. Si estas métricas no son deseables, puede eliminarlas llamando `Metrics.SuppressDefaultMetrics()` antes de registrar alguna de tus propias métricas.
 
-# Related projects
+### Proyectos relacionados
 
-* [prometheus-net.DotNetRuntime](https://github.com/djluck/prometheus-net.DotNetRuntime) instruments .NET Core 2.2 apps to export metrics on .NET Core performance.
+* [prometheus-net.DotNetRuntime](https://github.com/djluck/prometheus-net.DotNetRuntime) instrumentos .NET Core 2.2 aplicaciones para exportar metricas del rendimiento de .NET Core.
