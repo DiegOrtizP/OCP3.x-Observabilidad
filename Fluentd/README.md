@@ -2,8 +2,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ljwan71as6pf2joe?svg=true)](https://ci.appveyor.com/project/martinlindhe/wmi-exporter)
 
-Prometheus exporter for Windows machines, using the WMI (Windows Management Instrumentation).
-
+Prometheus exportador para máquinas con Windows, utilizando WMI (Instrumental de administración de Windows).
 
 ## Collectors
 
@@ -36,14 +35,14 @@ Name     | Description | Enabled by default
 [textfile](docs/collector.textfile.md) | Read prometheus metrics from a text file | &#10003;
 [vmware](docs/collector.vmware.md) | Performance counters installed by the Vmware Guest agent |
 
-See the linked documentation on each collector for more information on reported metrics, configuration settings and usage examples.
+Consulte la documentación vinculada a cada recopilador para obtener más información sobre las métricas informadas, los ajustes de configuración y los ejemplos de uso.
 
-## Installation
+## Instalacion
 The latest release can be downloaded from the [releases page](https://github.com/martinlindhe/wmi_exporter/releases).
 
-Each release provides a .msi installer. The installer will setup the WMI Exporter as a Windows service, as well as create an exception in the Windows Firewall.
+Cada versión proporciona un instalador .msi. El instalador configurará el WMI Exporter como un servicio de Windows, así como creará una excepción en el Firewall de Windows.
 
-If the installer is run without any parameters, the exporter will run with default settings for enabled collectors, ports, etc. The following parameters are available:
+Si el instalador se ejecuta sin ningún parámetro, el exportador se ejecutará con la configuración predeterminada para los recopiladores habilitados, puertos, etc. Los siguientes parámetros están disponibles:
 
 Name | Description
 -----|------------
@@ -70,7 +69,7 @@ msiexec /i <path-to-msi-file> ENABLED_COLLECTORS=os,service --% EXTRA_FLAGS="--c
 See [open issues](https://github.com/martinlindhe/wmi_exporter/issues)
 
 
-## Usage
+## Uso
 
     go get -u github.com/golang/dep
     go get -u github.com/prometheus/promu
@@ -79,9 +78,9 @@ See [open issues](https://github.com/martinlindhe/wmi_exporter/issues)
     promu build -v .
     .\wmi_exporter.exe
 
-The prometheus metrics will be exposed on [localhost:9182](http://localhost:9182)
+Las métricas de prometheus serán expuestas en [localhost:9182](http://localhost:9182)
 
-## Examples
+## Ejemplos
 
 ### Enable only service collector and specify a custom query
 
