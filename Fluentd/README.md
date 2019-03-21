@@ -4,7 +4,7 @@
 
 Prometheus exportador para máquinas con Windows, utilizando WMI (Instrumental de administración de Windows).
 
-## Collectors
+## Collectores
 
 Name     | Description | Enabled by default
 ---------|-------------|--------------------
@@ -38,7 +38,7 @@ Name     | Description | Enabled by default
 Consulte la documentación vinculada a cada recopilador para obtener más información sobre las métricas informadas, los ajustes de configuración y los ejemplos de uso.
 
 ## Instalacion
-The latest release can be downloaded from the [releases page](https://github.com/martinlindhe/wmi_exporter/releases).
+La última versión se puede descargar desde el [releases page](https://github.com/martinlindhe/wmi_exporter/releases).
 
 Cada versión proporciona un instalador .msi. El instalador configurará el WMI Exporter como un servicio de Windows, así como creará una excepción en el Firewall de Windows.
 
@@ -46,28 +46,26 @@ Si el instalador se ejecuta sin ningún parámetro, el exportador se ejecutará 
 
 Name | Description
 -----|------------
-`ENABLED_COLLECTORS` | As the `--collectors.enabled` flag, provide a comma-separated list of enabled collectors
-`LISTEN_ADDR` | The IP address to bind to. Defaults to 0.0.0.0
-`LISTEN_PORT` | The port to bind to. Defaults to 9182.
-`METRICS_PATH` | The path at which to serve metrics. Defaults to `/metrics`
-`TEXTFILE_DIR` | As the `--collector.textfile.directory` flag, provide a directory to read text files with metrics from
-`EXTRA_FLAGS` | Allows passing full CLI flags. Defaults to an empty string.
+`ENABLED_COLLECTORS` | Como la bandera `--collectors.enabled` , proporciona una lista separada por comas de colectores habilitados.
+`LISTEN_ADDR` | La dirección IP para enlazar. El default es: to 0.0.0.0
+`LISTEN_PORT` | El puerto para enlazar. Por defecto es: 9182.
+`METRICS_PATH` | La ruta en la que se entregan las métricas. Por defecto es: `/metrics`.
+`TEXTFILE_DIR` | Como la bandera `--collector.textfile.directory` , proporcionar un directorio para leer archivos de texto con métricas.
+`EXTRA_FLAGS` | Permite pasar banderas completas de la CLI. El valor predeterminado es una cadena vacía.
 
-Parameters are sent to the installer via `msiexec`. Example invocations:
+Los parámetros se envían al instalador a través de `msiexec`.
+
+## Ejemplos
 
 ```powershell
 msiexec /i <path-to-msi-file> ENABLED_COLLECTORS=os,iis LISTEN_PORT=5000
 ```
 
-Example service collector with a custom query.
+Ejemplo de colector de servicios con una consulta personalizada.
+
 ```powershell
 msiexec /i <path-to-msi-file> ENABLED_COLLECTORS=os,service --% EXTRA_FLAGS="--collector.service.services-where ""Name LIKE 'sql%'"""
 ```
-
-## Roadmap
-
-See [open issues](https://github.com/martinlindhe/wmi_exporter/issues)
-
 
 ## Uso
 
@@ -80,21 +78,14 @@ See [open issues](https://github.com/martinlindhe/wmi_exporter/issues)
 
 Las métricas de prometheus serán expuestas en [localhost:9182](http://localhost:9182)
 
-## Ejemplos
-
-### Enable only service collector and specify a custom query
+### Habilitar solo el recopilador de servicios y especificar una consulta personalizada
 
     .\wmi_exporter.exe --collectors.enabled "service" --collector.service.services-where "Name='wmi_exporter'"
 
-### Enable only process collector and specify a custom query
+###  Habilitar solo el colector de procesos y especificar una consulta personalizada
 
     .\wmi_exporter.exe --collectors.enabled "process" --collector.process.processes-where "Name LIKE 'firefox%'"
 
-When there are multiple processes with the same name, WMI represents those after the first instance as `process-name#index`. So to get them all, rather than just the first one, the query needs to be a wildcard search using a `%` character.
+Cuando hay varios procesos con el mismo nombre, WMI representa aquellos después de la primera instancia como `process-name#index`. Por lo tanto, para obtenerlos todos, en lugar de solo el primero, la consulta debe ser una búsqueda comodín con un carácter `%`.
 
-Please note that in Windows batch scripts (and when using the `cmd` command prompt), the `%` character is reserved, so it has to be escaped with another `%`. For example, the wildcard syntax for searching for all firefox processes is `firefox%%`.
-
-
-## License
-
-Under [MIT](LICENSE)
+Tenga en cuenta que en los scripts de proceso por lotes de Windows (y cuando se utiliza el símbolo del sistema `cmd`), el carácter`% `está reservado, por lo que debe escaparse con otro`% `. Por ejemplo, la sintaxis de comodín para buscar todos los procesos de Firefox es `firefox %%`.
