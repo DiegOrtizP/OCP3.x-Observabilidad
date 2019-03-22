@@ -2,7 +2,7 @@
 
 ## Introduccion
 
-[![Build status](https://ci.appveyor.com/api/projects/status/ljwan71as6pf2joe?svg=true)](https://ci.appveyor.com/project/martinlindhe/wmi-exporter)
+[Build status](https://ci.appveyor.com/api/projects/status/ljwan71as6pf2joe?svg=true)](https://ci.appveyor.com/project/martinlindhe/wmi-exporter)
 
 `NEST` es un cliente de alto nivel de `elasticsearch` que aún se correlaciona muy de cerca con la API de elasticsearch original. Las solicitudes y respuestas se han asignado a los objetos CLR y NEST también viene con un dsl de consulta muy potente.
 

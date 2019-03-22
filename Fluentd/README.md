@@ -14,9 +14,7 @@ A partir de la v10, `Fluentd` no es compatible con Windows. Sin embargo, hay oca
     1. Archivos de registro de seguimiento en Windows: recopile y analice los datos de registro de una aplicación de Windows.
     2. Recopilación de registros de eventos de Windows: recopile registros de eventos de sus servidores de Windows para el análisis del sistema, verificación de cumplimiento, etc.
 
-Si no está familiarizado con Fluentd, primero conozca más sobre Fluentd.
-
-[![fluentd](https://docs.fluentd.org/articles/architecture)
+Si no está familiarizado con Fluentd, primero conozca más sobre Fluentd: [fluentd](https://docs.fluentd.org/articles/architecture)
 
 ## Instalacion
 
@@ -129,3 +127,9 @@ En la máquina Linux que ejecuta Fluentd, verá la siguiente línea:
 
 NOTA: Este ejemplo mostró que podemos recopilar datos de una máquina con Windows y enviarlos a una instancia remota de Fluentd.
 Sin embargo, los datos no son tan eficientes porque cada línea de datos se coloca en el campo "mensaje" como texto no estructurado. Para fines de producción, probablemente querrá escribir un complemento / extender el complemento de syslog para poder analizar el campo "mensaje" en el evento.
+
+## Agentes
+
+Para descargar mas pluggins se puede dirigir a [PluginsElasticSearch](https://www.fluentd.org/plugins/all)
+
+### Plugin fluent-plugin-windows-eventlog
