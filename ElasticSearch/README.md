@@ -108,3 +108,82 @@ var index = client.Index(person, i=>i
 Esto indexará el documento utilizando como contexto de la url: `/another-index/another-type/1-should-not-be-the-id?refresh=true&&ttl=1m`
 
 ### Busquedas
+
+Ahora que hemos indexado algunos documentos podemos comenzar a buscarlos.
+
+```csharp
+var searchResults = client.Search<Person>(s=>s
+    .From(0)
+    .Size(10)
+    .Query(q=>q
+         .Term(p=>p.Firstname, "redhat")
+    )
+);
+```
+
+`searchResults.Documents` ahora tiene las primeras 10 personas que sabe de quién es el primer nombre `redhat`
+
+Consulte la [sección sobre consultas](https://www.elastic.co/guide/en/elasticsearch/client/net-api/1.x/writing-queries.html) de escritura para obtener detalles sobre cómo NEST le ayuda a escribir consultas de búsqueda en elasticsearch.
+
+De nuevo, se aplican las mismas reglas de inferencia ya que esto se indicara en `my-application/person/_search` y la misma regla que infiere puede ser anulada también.
+
+```csharp
+// uses /other-index/other-type/_search
+var searchResults = client.Search<Person>(s=>s
+    .Index("other-index")
+    .OtherType("other-type")
+);
+
+// uses /_all/person/_search
+var searchResults = client.Search<Person>(s=>s
+   .AllIndices()
+);
+
+// uses /_search
+var searchResults = client.Search<Person>(s=>s
+    .AllIndices()
+    .AllTypes()
+);
+```
+
+### Sintaxis del inicializador de objetos (OIS)
+
+Como puede ver en los ejemplos anteriores, NEST proporciona una sintaxis concisa y fluida para construir llamadas API a Elasticsearch. Sin embargo, no se preocupe si las lambdas no son lo suyo, ahora puede usar la nueva sintaxis de inicialización de objetos (OIS) introducida en 1.0.
+
+El OIS es una alternativa a la sintaxis fluida familiar de NEST y funciona en todos los puntos finales de API. Cualquier cosa que se pueda hacer con la sintaxis fluida ahora también se puede hacer usando el OIS.
+
+Por ejemplo, el ejemplo anterior de indexación anterior se puede volver a escribir como:
+
+```csharp
+var indexRequest = new IndexRequest<Person>(person)
+{
+    Index = "another-index",
+    Type = "another-type",
+    Id = "1-should-not-be-the-id",
+    Refresh = true,
+    Ttl = "1m"
+};
+
+var index = client.Index(indexRequest);
+```
+
+y para buscar:
+
+```csharp
+QueryContainer query = new TermQuery
+{
+    Field = "firstName",
+    Value = "martijn"
+};
+
+var searchRequest = new SearchRequest
+{
+    From = 0,
+    Size = 10,
+    Query = query
+};
+
+var searchResults = Client.Search<Person>(searchRequest);
+```
+
+Para mas informacion consulte [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/client/net-api/1.x/nest-quick-start.html#nest-quick-start)
