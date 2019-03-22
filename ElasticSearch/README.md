@@ -1,10 +1,5 @@
 # Elasticsearch
 
-Nombre     | Sección | Descripcion
----------|-------------|--------------------
-WMI exporter | Para maquinas Windows | . |
-prometheus-net | Add .Net | Esta es una biblioteca .NET para instrumentar sus aplicaciones y exportar métricas a [Prometheus](http://prometheus.io/). |
-
 ## Introduccion
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ljwan71as6pf2joe?svg=true)](https://ci.appveyor.com/project/martinlindhe/wmi-exporter)
